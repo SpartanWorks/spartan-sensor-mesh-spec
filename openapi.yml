@@ -5,11 +5,21 @@ info:
   version: 1.0.0
 servers:
   - url: mesh.sprtn.io
+tags:
+  - name: config
+    description: Manage the device configuration.
+  - name: mesh
+    description: Access connected devices in the mesh.
+  - name: data
+    description: Retrieve reading data.
 paths:
   /api/config:
     post:
+      operationId: updateConfig
+      tags: [config]
       summary: Update configuration
       requestBody:
+        description: The new configuration to use.
         required: true
         content:
           application/json:
@@ -24,7 +34,9 @@ paths:
           description: Internal server error
   /api/mesh:
     get:
-      summary: List mesh endpoints
+      operationId: listNodes
+      tags: [mash]
+      summary: List mesh nodes
       responses:
         '200':
           description: Successful operation
@@ -38,6 +50,8 @@ paths:
           description: Internal server error
   /api/data:
     get:
+      operationId: getData
+      tags: [data]
       summary: Get data
       responses:
         '200':
@@ -103,7 +117,7 @@ components:
         additionalProperties:
           $ref: '#/components/schemas/AnyValue'
     AnyValue:
-      description: "Can be anything, a string, number, object, etc. It's application-specific."
+      description: Can be anything, a string, number, object, etc. It's application-specific.
 
     ReadingConfig:
       type: object
