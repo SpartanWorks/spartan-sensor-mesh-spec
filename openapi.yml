@@ -1,0 +1,187 @@
+openapi: 3.0.0
+info:
+  title: Spartan Sensor Mesh
+  description: API endpoints definition of the SSM.
+  version: 1.0.0
+servers:
+  - url: mesh.sprtn.io
+paths:
+  /api/config:
+    post:
+      summary: Update configuration
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Config'
+      responses:
+        '200':
+          description: Successful update
+        '400':
+          description: Invalid request body
+        '500':
+          description: Internal server error
+  /api/mesh:
+    get:
+      summary: List mesh endpoints
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Mesh'
+        '500':
+          description: Internal server error
+  /api/data:
+    get:
+      summary: Get data
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Data'
+        '500':
+          description: Internal server error
+components:
+  schemas:
+    Config:
+      type: object
+      properties:
+        model:
+          type: string
+        group:
+          type: string
+        name:
+          type: string
+        password:
+          type: string
+        log:
+          type: object
+          properties:
+            level:
+              type: string
+              enum: ["debug", "info", "warning", "error", "critical"]
+            console:
+              $ref: '#/components/schemas/Bus'
+        sensors:
+          type: array
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+              enabled:
+                type: boolean
+              samplingInterval:
+                type: integer
+              connection:
+                $ref: '#/components/schemas/Bus'
+              readings:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReadingConfig'
+    Mesh:
+      type: object
+      properties:
+        hostname:
+          type: string
+        ip:
+          type: string
+        port:
+          type: integer
+    Bus:
+      type: object
+      properties:
+        bus:
+          type: string
+        additionalProperties:
+          $ref: '#/components/schemas/AnyValue'
+    AnyValue:
+      description: "Can be anything, a string, number, object, etc. It's application-specific."
+
+    ReadingConfig:
+      type: object
+      properties:
+        type:
+          type: string
+        name:
+          type: string
+        averaging:
+          type: number
+        widget:
+          $ref: '#/components/schemas/WidgetConfig'
+
+    Reading:
+      type: object
+      properties:
+        model:
+          type: string
+        type:
+          type: string
+        name:
+          type: string
+        status:
+          type: string
+        errors:
+          type: integer
+        lastError:
+          type: string
+        measurements:
+          type: integer
+        value:
+          type: object
+          properties:
+            last:
+              type: number
+            unit:
+              type: string
+            stats:
+              type: object
+              properties:
+                mean:
+                  type: number
+                variance:
+                  type: number
+                samples:
+                  type: integer
+                minimum:
+                  type: number
+                maximum:
+                  type: number
+            range:
+              type: object
+              properties:
+                minimum:
+                  type: number
+                maximum:
+                  type: number
+        config:
+          $ref: '#/components/schemas/WidgetConfig'
+
+    WidgetConfig:
+      type: object
+      properties:
+        type:
+          type: string
+        additionalProperties:
+          $ref: '#/components/schemas/AnyValue'
+
+    Data:
+      type: object
+      properties:
+        model:
+          type: string
+        group:
+          type: string
+        name:
+          type: string
+        readings:
+          type: array
+          items:
+            $ref: '#/components/schemas/Reading'
