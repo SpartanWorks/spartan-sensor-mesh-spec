@@ -32,6 +32,12 @@ jobs:
       with:
         args: generate -i openapi.yml -o scala-client -g scalaz -c scala-client-config.yml
 
+    - name: Avoid file ownership issues down the line.
+      run: |
+        USER=$(id -u)
+        GROUP=$(id -g)
+        sudo chown -R $USER:$GROUP scala-client
+
     - name: Setup JDK 17
       uses: actions/setup-java@v3
       with:
@@ -51,4 +57,4 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: scala-client
-        path: ~/ivy2/local/ssm-client/
+        path: ~/.ivy2/local/ssm-client/
