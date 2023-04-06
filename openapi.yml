@@ -64,8 +64,29 @@ paths:
           description: Internal server error
 components:
   schemas:
+    Mesh:
+      type: object
+      required:
+        - hostname
+        - ip
+        - port
+      properties:
+        hostname:
+          type: string
+        ip:
+          type: string
+        port:
+          type: integer
+
     Config:
       type: object
+      required:
+        - model
+        - group
+        - name
+        - password
+        - log
+        - sensors
       properties:
         model:
           type: string
@@ -77,6 +98,9 @@ components:
           type: string
         log:
           type: object
+          required:
+            - level
+            - console
           properties:
             level:
               type: string
@@ -87,6 +111,12 @@ components:
           type: array
           items:
             type: object
+            required:
+              - type
+              - enabled
+              - samplingInterval
+              - connection
+              - readings
             properties:
               type:
                 type: string
@@ -100,27 +130,27 @@ components:
                 type: array
                 items:
                   $ref: '#/components/schemas/ReadingConfig'
-    Mesh:
-      type: object
-      properties:
-        hostname:
-          type: string
-        ip:
-          type: string
-        port:
-          type: integer
+
     Bus:
       type: object
+      required:
+        - bus
       properties:
         bus:
           type: string
-        additionalProperties:
-          $ref: '#/components/schemas/AnyValue'
+      additionalProperties:
+        $ref: '#/components/schemas/AnyValue'
+
     AnyValue:
       description: Can be anything, a string, number, object, etc. It's application-specific.
 
     ReadingConfig:
       type: object
+      required:
+        - type
+        - name
+        - averaging
+        - widget
       properties:
         type:
           type: string
@@ -133,6 +163,16 @@ components:
 
     Reading:
       type: object
+      required:
+        - model
+        - type
+        - name
+        - status
+        - errors
+        - lastError
+        - measurements
+        - value
+        - config
       properties:
         model:
           type: string
@@ -150,6 +190,11 @@ components:
           type: integer
         value:
           type: object
+          required:
+            - last
+            - unit
+            - stats
+            - range
           properties:
             last:
               type: number
@@ -157,6 +202,10 @@ components:
               type: string
             stats:
               type: object
+              required:
+                - mean
+                - variance
+                - samples
               properties:
                 mean:
                   type: number
@@ -170,6 +219,9 @@ components:
                   type: number
             range:
               type: object
+              required:
+                - minimum
+                - maximum
               properties:
                 minimum:
                   type: number
@@ -180,14 +232,21 @@ components:
 
     WidgetConfig:
       type: object
+      required:
+        - type
       properties:
         type:
           type: string
-        additionalProperties:
-          $ref: '#/components/schemas/AnyValue'
+      additionalProperties:
+        $ref: '#/components/schemas/AnyValue'
 
     Data:
       type: object
+      required:
+        - model
+        - group
+        - name
+        - readings
       properties:
         model:
           type: string
