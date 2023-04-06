@@ -1,0 +1,22 @@
+val scala3Version = "3.2.2"
+val http4sVersion = "0.23.14"
+val circeVersion = "0.14.5"
+
+lazy val root = project
+  .in(file("."))
+  .settings(
+    scalaVersion := scala3Version,
+
+    libraryDependencies ++= Seq(
+      // HTTP
+      "org.http4s" %% "http4s-core" % http4sVersion,
+      "org.http4s" %% "http4s-dsl" % http4sVersion,
+      "org.http4s" %% "http4s-blaze-client" % http4sVersion,
+      "org.http4s" %% "http4s-circe" % http4sVersion,
+
+      // JSON
+      "io.circe" %% "circe-core" % circeVersion,
+      "io.circe" %% "circe-generic" % circeVersion,
+      "io.circe" %% "circe-config" % "0.10.0",
+    ),
+  )

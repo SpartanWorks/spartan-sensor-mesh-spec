@@ -1,0 +1,28 @@
+package {{modelPackage}}
+
+import io.circe.*
+import io.circe.generic.semiauto.*
+
+import scala.util.Try
+
+{{#joda}}
+import org.joda.time.DateTime
+{{/joda}}
+{{#java8}}
+import java.time.OffsetDateTime
+{{/java8}}
+
+object DateTimeCodecs {
+{{#joda}}
+
+  given Encoder[DateTime] = Encoder.encodeString.contramap[DateTime](dt => dt.toString())
+  given Decoder[DateTime] = Decoder.decodeString.emapTry(s => Try(DateTime.parse(s)))
+
+{{/joda}}
+{{#java8}}
+
+  given Encoder[OffsetDateTime] = Encoder.encodeString.contramap[OffsetDateTime](dt => dt.toString())
+  given Decoder[OffsetDateTime] = Decoder.decodeString.emapTry(s => Try(OffsetDateTime.parse(s)))
+
+{{/java8}}
+}

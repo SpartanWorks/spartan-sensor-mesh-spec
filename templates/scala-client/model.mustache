@@ -1,0 +1,55 @@
+package {{package}}
+
+import io.circe.*
+import io.circe.generic.semiauto.*
+
+{{#imports}}
+import {{import}}
+{{/imports}}
+
+{{#models}}
+{{#model}}
+import {{classname}}.*
+
+case class {{classname}} (
+  {{#vars}}{{#description}}/* {{{description}}} */
+  {{/description}}{{name}}: {{^required}}Option[{{/required}}{{^isEnum}}{{dataType}}{{/isEnum}}{{#isEnum}}{{datatypeWithEnum}}{{/isEnum}}{{^required}}]{{/required}}{{^-last}},{{/-last}}{{#-last}}){{/-last}}
+  {{/vars}}
+
+object {{classname}} {
+  import DateTimeCodecs.given
+
+  {{#hasEnums}}
+  {{#vars}}
+  {{#isEnum}}
+  sealed trait {{datatypeWithEnum}}
+  {{#_enum}}
+  case object {{#fnEnumEntry}}{{.}}{{/fnEnumEntry}} extends {{datatypeWithEnum}}
+  {{/_enum}}
+
+  object {{datatypeWithEnum}} {
+    def to{{datatypeWithEnum}}(s: String): Either[String, {{datatypeWithEnum}}] = s match {
+{{#_enum}}      case "{{#fnEnumEntry}}{{.}}{{/fnEnumEntry}}" => Right({{#fnEnumEntry}}{{.}}{{/fnEnumEntry}})
+{{/_enum}}
+      case _ => Left("Failed decoding {{datataypeWithEnum}} enum.")
+    }
+
+    def from{{datatypeWithEnum}}(x: {{datatypeWithEnum}}): String = x match {
+{{#_enum}}      case {{#fnEnumEntry}}{{.}}{{/fnEnumEntry}} => "{{#fnEnumEntry}}{{.}}{{/fnEnumEntry}}"
+{{/_enum}}
+    }
+  }
+
+  given Encoder[{{datatypeWithEnum}}] = Encoder.encodeString.contramap[{{datatypeWithEnum}}]({{datatypeWithEnum}}.from{{datatypeWithEnum}})
+  given Decoder[{{datatypeWithEnum}}] = Decoder.decodeString.emap({{datatypeWithEnum}}.to{{datatypeWithEnum}})
+
+  {{/isEnum}}
+  {{/vars}}
+  {{/hasEnums}}
+
+  given Encoder[{{classname}}] = deriveEncoder
+  given Decoder[{{classname}}] = deriveDecoder
+
+}
+{{/model}}
+{{/models}}

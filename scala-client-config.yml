@@ -1,0 +1,26 @@
+templateDir: templates/scala
+additionalProperties:
+  modelPackage: sw.generated.model
+  apiPackage: sw.generated.api
+  invokerPackage: sw.generated.api
+  artifactId: ssm-client
+  serializableModel: "true"
+  dateLibrary: java8
+files:
+  build.sbt.mustache:
+    destinationFilename: build.sbt
+  build.properties.mustache:
+    destinationFilename: project/build.properties
+  model.mustache:
+    templateType: Model
+    destinationFilename: .scala
+  api.mustache:
+    templateType: API
+    destinationFilename: .scala
+  dateTimeCodecs.mustache:
+    # NOTE This one is used by the models for JSON encoding.
+    destinationFilename: src/main/scala/sw/generated/model/DateTimeCodecs.scala
+  HelperCodecs.mustache:
+    destinationFilename: src/main/scala/sw/generated/api/HelperCodecs.scala
+  QueryParamTypeclass.mustache:
+    destinationFilename: src/main/scala/sw/generated/api/QueryParamTypeclass.scala

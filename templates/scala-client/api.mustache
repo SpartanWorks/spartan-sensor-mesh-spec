@@ -1,0 +1,72 @@
+package {{package}}
+
+import cats.effect.*
+import org.http4s.*
+import org.http4s.circe.*
+import org.http4s.circe.CirceEntityEncoder.circeEntityEncoder
+import org.http4s.circe.CirceEntityDecoder.circeEntityDecoder
+import org.http4s.client.*
+import org.http4s.client.dsl.Http4sClientDsl
+import org.http4s.dsl.io.*
+import org.http4s.implicits.*
+import org.http4s.headers.*
+import io.circe.*
+import io.circe.generic.auto.*
+import io.circe.parser.*
+
+import java.net.URLEncoder
+
+import HelperCodecs.given
+
+{{#imports}}
+import {{import}}
+import {{import}}.given
+{{/imports}}
+
+
+object {{classname}} {
+  def apply(client: Client[IO], host: String): {{classname}} =
+    new {{classname}}Impl(client, host)
+}
+
+trait {{classname}} {
+{{#operations}}
+  {{#operation}}
+  def {{nickname}}({{#allParams}}{{paramName}}: {{dataType}}{{#defaultValue}} = {{{defaultValue}}}{{/defaultValue}}{{^-last}}, {{/-last}}{{/allParams}}){{#queryParams}}{{#-first}}(implicit {{/-first}}{{paramName}}Query: QueryParam[{{dataType}}]{{^-last}}, {{/-last}}{{#-last}}){{/-last}}{{/queryParams}}: IO[{{#returnType}}{{returnType}}{{/returnType}}{{^returnType}}Unit{{/returnType}}]
+  {{/operation}}  
+{{/operations}}
+}
+
+class {{classname}}Impl(client: Client[IO], host: String) extends {{classname}} with Http4sClientDsl[IO] {
+  private def escape(value: String): String = URLEncoder.encode(value, "utf-8").replaceAll("\\+", "%20")
+
+{{#operations}}
+  {{#operation}}
+  def {{nickname}}({{#allParams}}{{paramName}}: {{dataType}}{{#defaultValue}} = {{{defaultValue}}}{{/defaultValue}}{{^-last}}, {{/-last}}{{/allParams}}){{#queryParams}}{{#-first}}(implicit {{/-first}}{{paramName}}Query: QueryParam[{{dataType}}]{{^-last}}, {{/-last}}{{#-last}}){{/-last}}{{/queryParams}}: IO[{{#returnType}}{{returnType}}{{/returnType}}{{^returnType}}Unit{{/returnType}}] = {
+
+    val path = "{{path}}"{{#pathParams}}.replaceAll("\\{" + "{{baseName}}" + "\\}",escape({{paramName}}.toString)){{/pathParams}}
+    
+    val httpMethod = Method.{{httpMethod}}
+    val contentType = `Content-Type`(MediaType.application.json)
+    val headers = Headers(
+      {{#headerParams}}Header("{{baseName}}", {{paramName}}){{^-last}}, {{/-last}}{{/headerParams}})
+    val queryParams = Query(
+      {{#queryParams}}("{{paramName}}", Some({{baseName}}Query.toParamString({{baseName}}))){{^-last}}, {{/-last}}{{/queryParams}})
+
+    for {
+      uri           <- IO.fromEither(Uri.fromString(host + path))
+      uriWithParams =  uri.copy(query = queryParams)
+      req           =  Request[IO](method = httpMethod, uri = uriWithParams, headers = headers.put(contentType)){{#bodyParam}}.withEntity({{paramName}}){{/bodyParam}}
+
+      {{#returnType}}
+      resp          <- client.expect[{{returnType}}](req)
+      {{/returnType}}
+      {{^returnType}}
+      resp          <- client.expect[Unit](req)
+      {{/returnType}}
+    } yield resp
+  }
+  
+  {{/operation}}
+{{/operations}}
+}
