@@ -1,0 +1,20 @@
+name: CI/CD
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Validate the OpenAPI spec.
+      uses: kpurdon/openapi-generator-action@v0.0.3
+      with:
+        args: validate -i openapi.yml --recommend
