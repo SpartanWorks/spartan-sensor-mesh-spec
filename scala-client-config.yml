@@ -1,4 +1,4 @@
-templateDir: templates/scala
+templateDir: templates/scala-client
 additionalProperties:
   modelPackage: sw.generated.model
   apiPackage: sw.generated.api

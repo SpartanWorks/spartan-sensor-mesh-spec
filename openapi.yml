@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   title: Spartan Sensor Mesh
   description: API endpoints definition of the SSM.
-  version: 1.0.0
+  version: 0.0.1
 servers:
   - url: mesh.sprtn.io
 tags:
