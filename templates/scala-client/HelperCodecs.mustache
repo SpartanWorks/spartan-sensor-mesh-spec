@@ -1,0 +1,11 @@
+package {{apiPackage}}
+
+import io.circe.*
+import io.circe.generic.semiauto.*
+
+import org.http4s.*
+import org.http4s.circe.*
+
+object HelperCodecs {
+  implicit def returnTypeDecoder[F[_], A: Encoder]: EntityEncoder[F, List[A]] = jsonEncoderOf[F, List[A]]
+}
