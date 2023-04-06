@@ -35,7 +35,7 @@ paths:
   /api/mesh:
     get:
       operationId: listNodes
-      tags: [mash]
+      tags: [mesh]
       summary: List mesh nodes
       responses:
         '200':
