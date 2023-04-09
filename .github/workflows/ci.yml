@@ -30,7 +30,7 @@ jobs:
     - name: Generate the Scala client
       uses: kpurdon/openapi-generator-action@v0.0.3
       with:
-        args: generate -i openapi.yml -o scala-client -g scalaz -c scala-client-config.yml
+        args: generate -i openapi.yml -o scala-client -c scala-client-config.yml
 
     - name: Avoid file ownership issues down the line.
       run: |
