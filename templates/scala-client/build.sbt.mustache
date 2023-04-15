@@ -5,10 +5,11 @@ val circeVersion = "0.14.5"
 lazy val root = project
   .in(file("."))
   .settings(
-    version := "{{version}}",
-    name := "{{artifactId}}",
-
     scalaVersion := scala3Version,
+
+    version := "{{version}}",
+    versionScheme := Some("early-semver"),
+    name := "{{artifactId}}",
 
     libraryDependencies ++= Seq(
       // HTTP
@@ -21,4 +22,9 @@ lazy val root = project
       "io.circe" %% "circe-core" % circeVersion,
       "io.circe" %% "circe-generic" % circeVersion,
     ),
+
+    // Publishing
+    githubOwner := "SpartanWorks",
+    githubRepository := "spartan-sensor-mesh-spec",
+
   )

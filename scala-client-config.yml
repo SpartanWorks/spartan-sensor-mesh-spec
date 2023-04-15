@@ -10,6 +10,8 @@ templateDir: templates/scala-client
 files:
   build.sbt.mustache:
     destinationFilename: build.sbt
+  plugins.sbt.mustache:
+    destinationFilename: project/plugins.sbt
   build.properties.mustache:
     destinationFilename: project/build.properties
   model.mustache:
