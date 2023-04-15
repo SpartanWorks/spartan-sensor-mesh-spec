@@ -51,10 +51,12 @@ jobs:
       uses: coursier/setup-action@v1
 
     - name: Build the client
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: cd scala-client && sbt publishLocal
 
     - name: Save client artifact
       uses: actions/upload-artifact@v3
       with:
         name: scala-client
-        path: ~/.ivy2/local/ssm-client/
+        path: ~/.ivy2/local/spartan.works/
