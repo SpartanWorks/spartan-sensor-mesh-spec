@@ -29,13 +29,13 @@ object {{classname}} {
 
   object {{datatypeWithEnum}} {
     def to{{datatypeWithEnum}}(s: String): Either[String, {{datatypeWithEnum}}] = s match {
-{{#_enum}}      case "{{#fnEnumEntry}}{{.}}{{/fnEnumEntry}}" => Right({{#fnEnumEntry}}{{.}}{{/fnEnumEntry}})
+{{#_enum}}      case "{{.}}" => Right({{#fnEnumEntry}}{{.}}{{/fnEnumEntry}})
 {{/_enum}}
-      case _ => Left("Failed decoding {{datataypeWithEnum}} enum.")
+      case _ => Left("Failed decoding {{datatypeWithEnum}} enum.")
     }
 
     def from{{datatypeWithEnum}}(x: {{datatypeWithEnum}}): String = x match {
-{{#_enum}}      case {{#fnEnumEntry}}{{.}}{{/fnEnumEntry}} => "{{#fnEnumEntry}}{{.}}{{/fnEnumEntry}}"
+{{#_enum}}      case {{#fnEnumEntry}}{{.}}{{/fnEnumEntry}} => "{{.}}"
 {{/_enum}}
     }
   }
