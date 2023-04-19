@@ -1,4 +1,6 @@
 generatorName: scalaz
+typeMappings:
+  AnyType: Json
 additionalProperties:
   modelPackage: sw.generated.model
   apiPackage: sw.generated.api
