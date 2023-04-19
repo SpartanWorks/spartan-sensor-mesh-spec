@@ -2,9 +2,9 @@ generatorName: scalaz
 typeMappings:
   AnyType: Json
 additionalProperties:
-  modelPackage: sw.generated.model
-  apiPackage: sw.generated.api
-  invokerPackage: sw.generated.api
+  modelPackage: ssm.model.generated
+  apiPackage: ssm.api.generated
+  invokerPackage: ssm.api.generated
   artifactId: ssm-client
   serializableModel: "true"
   dateLibrary: java8
