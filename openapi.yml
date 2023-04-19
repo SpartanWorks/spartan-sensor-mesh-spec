@@ -133,16 +133,8 @@ components:
 
     Bus:
       type: object
-      required:
-        - bus
-      properties:
-        bus:
-          type: string
       additionalProperties:
-        $ref: '#/components/schemas/AnyValue'
-
-    AnyValue:
-      description: Can be anything, a string, number, object, etc. It's application-specific.
+        description: Can be anything, a string, number, object, etc. It's application-specific.
 
     ReadingConfig:
       type: object
@@ -232,13 +224,8 @@ components:
 
     WidgetConfig:
       type: object
-      required:
-        - type
-      properties:
-        type:
-          type: string
       additionalProperties:
-        $ref: '#/components/schemas/AnyValue'
+        description: Can be anything, a string, number, object, etc. It's application-specific.
 
     Data:
       type: object
