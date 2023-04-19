@@ -24,8 +24,8 @@ files:
     destinationFilename: .scala
   dateTimeCodecs.mustache:
     # NOTE This one is used by the models for JSON encoding.
-    destinationFilename: src/main/scala/sw/generated/model/DateTimeCodecs.scala
+    destinationFilename: src/main/scala/ssm/model/generated/DateTimeCodecs.scala
   HelperCodecs.mustache:
-    destinationFilename: src/main/scala/sw/generated/api/HelperCodecs.scala
+    destinationFilename: src/main/scala/ssm/api/generated/HelperCodecs.scala
   QueryParamTypeclass.mustache:
-    destinationFilename: src/main/scala/sw/generated/api/QueryParamTypeclass.scala
+    destinationFilename: src/main/scala/ssm/api/generated/QueryParamTypeclass.scala
